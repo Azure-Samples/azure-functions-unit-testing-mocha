@@ -1,53 +1,162 @@
 ---
 page_type: sample
 languages:
-- csharp
+- nodejs
 products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
+- functions
+description: "This repository includes examples demonstrating how to run tests against an HTTP-triggered and timer-triggered function in JavaScript using Mocha, chai and Sinon"
+urlFragment: "azure-functions-unit-testing-using-mocha"
 ---
 
-# Official Microsoft Sample
+# Testing Azure functions using Mocha
 
-<!-- 
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
+This repository includes examples demonstrating how to run tests against an HTTP-triggered and timer-triggered function in JavaScript using  [Mocha](https://mochajs.org) and works best with [Visual Studio Code](https://code.visualstudio.com/).
 
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
+Testing all code is recommended, however you may get the best results by wrapping up a Function's logic and creating tests outside the Function. Abstracting logic away limits a Function's lines of code and allows the Function to be solely responsible for calling other classes or modules. There are two functions with associated tests available, these examples include:
 
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
+* HTTP-triggered function: The example demonstrates how to pass in query string parameters to the function.
+* Timer-triggered function: A non-HTTP triggered function (in the form of a timer-triggered function) is included to demonstrate how to test a function that is not callable via a standard HTTP request.
 
-Give a short description for your sample here. What does it do and why is it important?
+![Testing Azure Functions with JavaScript in VS Code](./media/azure-functions-test-vs-code-mocha.png)
 
-## Contents
+To read more about the testing Azure functions, read [Strategies for testing your code in Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-test-a-function)
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
-
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
-
-## Prerequisites
-
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+This procedure uses the [VS Code Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) to create Azure Functions
 
-## Running the sample
+To set up your environment, initialize a new Node.js app in an empty folder by running `npm init`.
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+```bash
+npm init -y
+```
 
-## Key concepts
+Next, install Jest by running the following command:
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+```bash
+npm i mocha chai sinon
+```
+
+Now update _package.json_ to replace the existing test command with the following command:
+
+```bash
+"scripts": {
+    "test": "mocha --recursive '**/tests/*'"
+}
+```
+
+### Create test modules
+
+With the project initialized, you can create the modules used to run the automated tests.
+
+Begin by creating a new Azure function using the VS Code Functions extension to [create a new JavaScript HTTP Function](/azure/javascript/tutorial-vscode-serverless-node-01) and name it *HttpTrigger*. Create new folders named *testing* and *test* to hold the support modules & test cases.
+
+In the *testing* folder add a new file, name it **defaultContext.js**, and add the following code:
+
+```javascript
+var sinon = require('sinon');
+module.exports = {
+    log: sinon.stub()
+};
+```
+
+This module mocks the *log* function to represent the default execution context.
+
+In the **tests** folder create a new file named **index.test.js** and add the following code:
+
+```javascript
+var chai = require('chai');
+const httpFunction = require('./index');
+const context = require('../testing/defaultContext')
+var expect = chai.expect;
+
+it('Http trigger should return known text', async () => {
+
+    const request = {
+        query: { name: 'Bill' }
+    };
+
+    await httpFunction(context, request);
+
+    expect(context.log.callCount).to.equal(1);
+    expect(context.res.body).toEqual('Hello Bill');
+});
+```
+
+The HTTP function from the template returns a string of "Hello" concatenated with the name provided in the query string. This test creates a fake instance of a request and passes it to the HTTP function. The test checks that the *log* method is called once and the returned text equals "Hello Bill".
+
+Next, use the VS Code Functions extension to create a new JavaScript Timer Function and name it *TimerTrigger*. Once the function is created, add new folders **testing** and **tests**.
+
+In the *testing* folder add 2 new files named **defaultContext.js** and **defaultTimer.js**.
+
+In **defaultContext.js** add the following code:
+
+```javascript
+var sinon = require('sinon');
+module.exports = {
+    log: sinon.stub()
+};
+```
+
+and in **defaultTimer.js** add the following code:
+
+```javascript
+module.exports = {
+    IsPastDue: false
+};
+```
+
+This module implements the `IsPastDue` property to stand is as a fake timer instance. Timer configurations like NCRONTAB expressions are not required here as the test harness is simply calling the function directly to test the outcome.
+
+Now create a new file in the **tests** folder named **index.test.js**, and add the following code:
+
+```javascript
+var chai = require('chai');
+const timerFunction = require('./index');
+const context = require('../testing/defaultContext');
+const timer = require('../testing/defaultTimer');
+var expect = chai.expect;
+it('Timer trigger should log message', () => {
+    timerFunction(context, timer);
+    expect(context.log.callCount).to.equal(1);
+});
+```
+
+The timer function from the template logs a message at the end of the body of the function. This test ensures the *log* function is called once.
+
+### Run tests
+
+To run the tests, press **CTRL + ~** to open the command window, and run `npm test`:
+
+```bash
+npm test
+```
+
+![Testing Azure Functions with JavaScript in VS Code](./media/azure-functions-test-vs-code-mocha.png)
+
+### Debug tests
+
+To debug your tests, add the following configuration to your *launch.json* file:
+
+```json
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Mocha Tests",
+    "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+    "args": 
+    [
+        "--timeout",
+        "999999",
+        "--colors",
+        "'${workspaceFolder}/{,!(node_modules)/}*/*.test.js'"
+    ],
+  "internalConsoleOptions": "openOnSessionStart"
+}
+```
+
+Next, set a breakpoint in your test and press **F5**.
 
 ## Contributing
 
