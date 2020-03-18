@@ -1,53 +1,57 @@
 ---
 page_type: sample
 languages:
-- csharp
+- nodejs
 products:
-- dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
+- functions
+description: "This repository includes examples demonstrating how to run tests against an HTTP-triggered and timer-triggered function in JavaScript using Mocha, chai and Sinon"
+urlFragment: "azure-functions-unit-testing-using-mocha"
 ---
 
-# Official Microsoft Sample
+# Testing Azure Functions using Mocha
 
-<!-- 
-Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
 
-Guidance on onboarding samples to docs.microsoft.com/samples: https://review.docs.microsoft.com/help/onboard/admin/samples/process/onboarding?branch=master
+This repository includes examples demonstrating how to run tests against an HTTP-triggered and timer-triggered function in JavaScript using  [Mocha](https://mochajs.org) and works best with [Visual Studio Code](https://code.visualstudio.com/).
 
-Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
--->
+Testing all code is recommended, however you may get the best results by wrapping up a Function's logic and creating tests outside the Function. Abstracting logic away limits a Function's lines of code and allows the Function to be solely responsible for calling other classes or modules. There are two functions with associated tests available, these examples include:
 
-Give a short description for your sample here. What does it do and why is it important?
+* HTTP-triggered function: The example demonstrates how to pass in query string parameters to the function.
+* Timer-triggered function: A non-HTTP triggered function (in the form of a timer-triggered function) is included to demonstrate how to test a function that is not callable via a standard HTTP request.
 
-## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
+To read more about the testing Azure functions, read [Strategies for testing your code in Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-test-a-function)
 
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
-
-## Prerequisites
-
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+Open the folder src in VS Code. Run npm install to install the dependencies and then run npm test to run the tests. The output from the tests should look something like the following:
 
-## Running the sample
+![Testing Azure Functions with JavaScript in VS Code](./media/azure-functions-test-vs-code-mocha.png)
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+### Debug tests
 
-## Key concepts
+To debug your tests, add the following configuration if not present to your *launch.json* file:
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+```json
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Mocha Tests",
+    "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+    "args": 
+    [
+        "--timeout",
+        "999999",
+        "--colors",
+        "'${workspaceFolder}/{,!(node_modules)/}*/*.test.js'"
+    ],
+  "internalConsoleOptions": "openOnSessionStart"
+}
+```
+
+Next, set a breakpoint in your test and press **F5**.
+
+To learn more on how to setup & debug from scratch, please read this [document](/walkthrough.md)
 
 ## Contributing
 
