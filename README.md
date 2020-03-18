@@ -18,7 +18,6 @@ Testing all code is recommended, however you may get the best results by wrappin
 * HTTP-triggered function: The example demonstrates how to pass in query string parameters to the function.
 * Timer-triggered function: A non-HTTP triggered function (in the form of a timer-triggered function) is included to demonstrate how to test a function that is not callable via a standard HTTP request.
 
-![Testing Azure Functions with JavaScript in VS Code](./media/azure-functions-test-vs-code-mocha.png)
 
 To read more about the testing Azure functions, read [Strategies for testing your code in Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-test-a-function)
 
