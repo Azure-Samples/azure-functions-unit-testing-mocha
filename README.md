@@ -24,7 +24,7 @@ To read more about the testing Azure functions, read [Strategies for testing you
 
 ## Setup
 
-This procedure uses the [VS Code Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) to create Azure Functions
+This procedure uses the [VS Code Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions) to create Azure Functions.
 
 To set up your environment, initialize a new Node.js app in an empty folder by running `npm init`.
 
