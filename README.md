@@ -88,7 +88,8 @@ it('Http trigger should return known text', async () => {
 
 The HTTP function from the template returns a string of "Hello" concatenated with the name provided in the query string. This test creates a fake instance of a request and passes it to the HTTP function. The test checks that the *log* method is called once and the returned text equals "Hello Bill".
 
-Next, use the VS Code Functions extension to create a new JavaScript Timer Function and name it *TimerTrigger*. Once the function is created, add new folders **testing** and **tests**.
+Next, use the VS Code Functions extension to create a new JavaScript Timer function and name it *TimerTrigger*. Once the function is created, add new folders **testing** and **tests**.
+
 
 In the *testing* folder add 2 new files named **defaultContext.js** and **defaultTimer.js**.
 
