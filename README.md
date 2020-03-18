@@ -8,7 +8,8 @@ description: "This repository includes examples demonstrating how to run tests a
 urlFragment: "azure-functions-unit-testing-using-mocha"
 ---
 
-# Testing Azure functions using Mocha
+# Testing Azure Functions using Mocha
+
 
 This repository includes examples demonstrating how to run tests against an HTTP-triggered and timer-triggered function in JavaScript using  [Mocha](https://mochajs.org) and works best with [Visual Studio Code](https://code.visualstudio.com/).
 
