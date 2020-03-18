@@ -51,7 +51,7 @@ Now update _package.json_ to replace the existing test command with the followin
 
 With the project initialized, you can create the modules used to run the automated tests.
 
-Begin by creating a new Azure function using the VS Code Functions extension to [create a new JavaScript HTTP Function](/azure/javascript/tutorial-vscode-serverless-node-01) and name it *HttpTrigger*. Create new folders named *testing* and *test* to hold the support modules & test cases.
+Begin by creating a new function using the VS Code Functions extension to [create a new JavaScript HTTP Function](https://docs.microsoft.com/azure/javascript/tutorial-vscode-serverless-node-01) and name it *HttpTrigger*. Create new folders named *testing* and *test* to hold the support modules & test cases.
 
 In the *testing* folder add a new file, name it **defaultContext.js**, and add the following code:
 
