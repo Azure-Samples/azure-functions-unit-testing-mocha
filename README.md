@@ -32,7 +32,8 @@ To set up your environment, initialize a new Node.js app in an empty folder by r
 npm init -y
 ```
 
-Next, install Jest by running the following command:
+Next, install Mocha by running the following command:
+
 
 ```bash
 npm i mocha chai sinon
