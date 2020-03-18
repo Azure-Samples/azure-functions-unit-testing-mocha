@@ -68,10 +68,10 @@ This module mocks the *log* function to represent the default execution context.
 In the **tests** folder create a new file named **index.test.js** and add the following code:
 
 ```javascript
-var chai = require('chai');
+let chai = require('chai');
 const httpFunction = require('./index');
 const context = require('../testing/defaultContext')
-var expect = chai.expect;
+let expect = chai.expect;
 
 it('Http trigger should return known text', async () => {
 
@@ -115,11 +115,11 @@ This module implements the `IsPastDue` property to stand is as a fake timer inst
 Now create a new file in the **tests** folder named **index.test.js**, and add the following code:
 
 ```javascript
-var chai = require('chai');
+let chai = require('chai');
 const timerFunction = require('./index');
 const context = require('../testing/defaultContext');
 const timer = require('../testing/defaultTimer');
-var expect = chai.expect;
+let expect = chai.expect;
 it('Timer trigger should log message', () => {
     timerFunction(context, timer);
     expect(context.log.callCount).to.equal(1);
